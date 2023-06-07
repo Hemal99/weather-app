@@ -12,6 +12,8 @@ import {
   Submit,
 } from "./styles";
 
+import LoginImg from "../../assets/login.jpg";
+
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .min(2, "Your name is too short")
@@ -40,12 +42,10 @@ function Login() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/premier-mart-9aa09.appspot.com/o/01d9bc30971807.563b2b13c384b.gif?alt=media&token=5c5b07cc-b193-46ae-9a02-364190d7b912&_gl=1*bjc0oo*_ga*NzA3NzU0NTQxLjE2ODAzOTI3Mjc.*_ga_CW55HF8NVT*MTY4NjEzMDMwMy4xNC4xLjE2ODYxMzAzMzguMC4wLjA"
-          alt=""
-          style={{ width: "10rem" }}
-        />
+      <div
+        style={{ display: "flex", justifyContent: "center", fontSize: "3rem" }}
+      >
+        Login
       </div>
 
       <PageWrapper>
