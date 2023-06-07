@@ -17,8 +17,8 @@ import LoginImg from "../../assets/login.jpg";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(2, "Your name is too short")
-    .required("Please enter your full name"),
+    .min(2, "Password is too short")
+    .required("Please enter the Password"),
   email: Yup.string()
     .email("The email is incorrect")
     .required("Please enter your email"),

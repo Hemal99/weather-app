@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { ReactComponent as LocationIconSvg } from '../../assets/location-icon.svg';
-import { ReactComponent as SearchIconSvg } from '../../assets/search-icon.svg';
+import styled from "styled-components";
+import { ReactComponent as LocationIconSvg } from "../../assets/location-icon.svg";
+import { ReactComponent as SearchIconSvg } from "../../assets/search-icon.svg";
 
 export const SearchElement = styled.div`
   position: relative;
@@ -65,10 +65,26 @@ export const SuggestionItem = styled.a`
   padding: 0.6rem 1rem;
   display: block;
   text-align: left;
-  border-bottom: 1px dotted ${({ theme }) => theme.searchSuggestion.seperatorLineColor};
+  border-bottom: 1px dotted
+    ${({ theme }) => theme.searchSuggestion.seperatorLineColor};
   font-size: 1rem;
   cursor: pointer;
   &:hover {
-    background-color: ${({ theme }) => theme.searchSuggestion.hoverBackgroundColor};
+    background-color: ${({ theme }) =>
+      theme.searchSuggestion.hoverBackgroundColor};
   }
+`;
+
+export const Select = styled.select`
+  /* Add your desired styles here */
+  width: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+`;
+
+export const Option = styled.option`
+  /* Add your desired styles here */
+  color: #333;
+  background-color: #fff;
 `;

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const ForecastContainer = styled.div`
   margin-top: 1rem;
@@ -22,9 +22,25 @@ export const ForecastItems = styled.div`
     margin-right: 0;
   }
 `;
+
+export const ForecastItemsInitial = styled.div`
+  display: flex;
+  margin-left: 8rem;
+  margin-right: 8rem;
+  justify-content: space-between;
+  overflow-x: auto;
+
+  > :last-child {
+    margin-right: 0;
+  }
+`;
+
 export const ForecastItemContainer = styled.div`
   display: flex;
   flex-direction: column;
+  border: 1px solid #4581c5;
+  border-radius: 15px;
+  padding: 1.5rem;
   align-items: center;
   margin-top: 1rem;
   h6 {
@@ -47,5 +63,10 @@ export const ForecastItemContainer = styled.div`
     color: #4a6fa1;
     width: 5rem;
     text-align: center;
+  }
+
+  &:hover {
+    background-color: #fff;
+    color: black;
   }
 `;

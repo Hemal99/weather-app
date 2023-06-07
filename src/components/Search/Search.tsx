@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
-import { useDispatch } from "react-redux";
+
 import { fetchWeather } from "../../store/fetchWeather";
 import { fetchCities } from "./../../api/placeSuggestion";
 import { useClickOutside } from "./../../hooks/useClickOutside";
+import { useDispatch, useSelector } from "react-redux";
 import {
   LocationButton,
   LocationIcon,
@@ -11,8 +12,15 @@ import {
   SearchIcon,
   SearchInput,
   SearchResult,
+  Select,
+  Option,
 } from "./styled";
 import Suggestion from "./Suggestion";
+
+import { HeaderIconsContainer } from "../Header/styed";
+import DarkModeToggle from "react-dark-mode-toggle";
+import { AppStore } from "../../store/store";
+import { toggleDarkMode } from "../../store/reducers/appReducer";
 
 const mockData = [
   {
@@ -115,6 +123,68 @@ const mockData = [
       lng: 79.9096,
     },
   },
+  {
+    city: "Matale",
+    coords: {
+      lat: 7.4675,
+      lng: 80.6234,
+    },
+  },
+  {
+    city: "Nuwara",
+    coords: {
+      lat: 6.9497,
+      lng: 80.7891,
+    },
+  },
+];
+
+const cityNames = [
+  "Colombo",
+  "Galle",
+  "Kandy",
+  "Jaffna",
+  "Anuradhapura",
+  "Badulla",
+  "Batticaloa",
+  "Gampaha",
+  "Hambantota",
+  "Kalutara",
+  "Kegalle",
+  "Kilinochchi",
+  "Kurunegala",
+  "Mannar",
+  "Matara",
+  "Monaragala",
+  "Mullaitivu",
+  "Nuwara Eliya",
+  "Polonnaruwa",
+  "Puttalam",
+  "Ratnapura",
+  "Trincomalee",
+  "Vavuniya",
+  "Ampara",
+  "Boralesgamuwa",
+  "Dehiwala-Mount Lavinia",
+  "Embilipitiya",
+  "Horana",
+  "Kadawatha",
+  "Kalmunai",
+  "Katunayake",
+  "Kelaniya",
+  "Kuliyapitiya",
+  "Maharagama",
+  "Moratuwa",
+  "Negombo",
+  "Panadura",
+  "Peliyagoda",
+  "Sri Jayawardenepura Kotte",
+  "Wattala",
+  "Weerawila",
+  "Weligama",
+  "Wattala",
+  "Wennappuwa",
+  // Add more city names as needed
 ];
 
 const Search: React.FC = () => {
@@ -126,6 +196,9 @@ const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
+  const [filter, setFilter] = useState("area");
+
+  const isDarkMode = useSelector((state: AppStore) => state.app.darkMode);
 
   useEffect(() => {
     if (!searchTerm) {
@@ -133,7 +206,15 @@ const Search: React.FC = () => {
     }
     setShowSuggestions(true);
 
-    setSuggestions(mockData.map((item) => item.city));
+    const newSearchTerm = searchTerm.toLowerCase().trim();
+
+    // Filter the mockData array based on the city name
+    const filteredCities = cityNames.filter((data) => {
+      const city = data.toLowerCase();
+      return city.includes(newSearchTerm);
+    });
+
+    setSuggestions(filteredCities.map((item) => item));
   }, [searchTerm]);
 
   useEffect(() => {
@@ -183,69 +264,103 @@ const Search: React.FC = () => {
       })
     );
   };
+
+  const handleSelectChange = (event: any) => {
+    setFilter(event.target.value);
+  };
+
   return (
     <>
-      <SearchElement>
-        <SearchIcon onClick={searchLocation} />
-        <DebounceInput
-          element={SearchInput}
-          debounceTimeout={300}
-          onChange={onSearchLatitude}
-          placeholder="latitude"
-        />
+      <div
+        style={{
+          marginTop: "10px",
+          marginBottom: "10px",
+          justifyContent: "space-between",
+          display: "flex",
+        }}
+      >
+        <div>
+          <Select id="location" value={filter} onChange={handleSelectChange}>
+            <Option value="area">Area</Option>
+            <Option value="city">City</Option>
+          </Select>
+        </div>
 
-        <DebounceInput
-          element={SearchInput}
-          debounceTimeout={300}
-          onChange={onSearchLongitude}
-          placeholder="longitude"
-        />
-        <LocationButton
-          onClick={() => {
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-              alert("Geolocation is not supported by this browser.");
-            }
-          }}
-        >
-          <LocationIcon />
-        </LocationButton>
-      </SearchElement>
-      <SearchElement>
-        <SearchIcon onClick={searchLocation} />
-        <DebounceInput
-          element={SearchInput}
-          debounceTimeout={300}
-          onChange={onSearchCity}
-          placeholder="City Search ..."
-        />
+        <div>
+          <HeaderIconsContainer>
+            <DarkModeToggle
+              checked={isDarkMode}
+              onChange={() => dispatch(toggleDarkMode())}
+              size={60}
+            />
+          </HeaderIconsContainer>
+        </div>
+      </div>
 
-        <LocationButton
-          onClick={() => {
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-              alert("Geolocation is not supported by this browser.");
-            }
-          }}
-        >
-          <LocationIcon />
-        </LocationButton>
-        {showSuggestions && (
-          <SearchResult ref={suggestionRef}>
-            {suggestions?.slice(0, 12)?.map((s, i) => (
-              <Suggestion
-                key={i}
-                label={s}
-                hideSuggestionFn={() => {
-                  setShowSuggestions(false);
-                }}
-              />
-            ))}
-          </SearchResult>
-        )}
-      </SearchElement>
+      {filter === "area" ? (
+        <SearchElement>
+          <SearchIcon onClick={searchLocation} />
+          <DebounceInput
+            element={SearchInput}
+            debounceTimeout={300}
+            onChange={onSearchLatitude}
+            placeholder="latitude"
+          />
+
+          <DebounceInput
+            element={SearchInput}
+            debounceTimeout={300}
+            onChange={onSearchLongitude}
+            placeholder="longitude"
+          />
+          <LocationButton
+            onClick={() => {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+              } else {
+                alert("Geolocation is not supported by this browser.");
+              }
+            }}
+          >
+            <LocationIcon />
+          </LocationButton>
+        </SearchElement>
+      ) : (
+        <SearchElement>
+          <SearchIcon onClick={searchLocation} />
+          <DebounceInput
+            element={SearchInput}
+            debounceTimeout={300}
+            onChange={onSearchCity}
+            placeholder="City Search"
+          />
+
+          <LocationButton
+            onClick={() => {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+              } else {
+                alert("Geolocation is not supported by this browser.");
+              }
+            }}
+          >
+            <LocationIcon />
+          </LocationButton>
+          {showSuggestions && (
+            <SearchResult ref={suggestionRef}>
+              {suggestions?.slice(0, 12)?.map((s, i) => (
+                <Suggestion
+                  key={i}
+                  label={s}
+                  hideSuggestionFn={() => {
+                    setShowSuggestions(false);
+                  }}
+                />
+              ))}
+            </SearchResult>
+          )}
+        </SearchElement>
+      )}
     </>
   );
 };
