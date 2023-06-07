@@ -25,7 +25,6 @@ export const PageWrapper = styled.section`
   margin-right: auto;
   margin-top: 1.5rem;
   padding: 1rem 0.75rem;
-  border: 1px solid lightgrey;
   border-radius: 4px;
 `;
 
