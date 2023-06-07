@@ -10,6 +10,7 @@ import {
   Input,
   StyledInlineErrorMessage,
   Submit,
+  Header,
 } from "./styles";
 
 import LoginImg from "../../assets/login.jpg";
@@ -42,11 +43,11 @@ function Login() {
 
   return (
     <div>
-      <div
+      <Header
         style={{ display: "flex", justifyContent: "center", fontSize: "3rem" }}
       >
         Login
-      </div>
+      </Header>
 
       <PageWrapper>
         <Formik

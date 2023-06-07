@@ -53,6 +53,11 @@ export const Title = styled.h1`
   margin-top: 0;
 `;
 
+export const Header = styled.h1`
+  color: ${({ theme }) => theme.appTitleColor};
+  font-size: 2.2rem;
+`;
+
 export const Label = styled.label`
   margin-top: 1.5rem;
   width: 100%;
